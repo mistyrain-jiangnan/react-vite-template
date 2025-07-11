@@ -9,7 +9,7 @@
     @close="$emit('update:visible', false)"
   >
     <el-menu
-      default-active="1"
+      :default-active="currentActive"
       class="el-menu-vertical"
       @open="$emit('open', ...arguments)"
       @close="$emit('close', ...arguments)"
@@ -27,7 +27,7 @@
         >
           <el-menu-item
             class="el-menu-li"
-            :index="item.index"
+            :index="item.route"
           >
             <i :class="item.icon"></i>
             <span slot="title">{{ item.label }}</span>
@@ -47,10 +47,51 @@ export default {
   },
   data() {
     return {
-      menuGroups
+      menuGroups,
+      currentActive: ''
     }
   },
+  watch: {
+    '$route.path': {
+      immediate: true,
+      handler() {
+        this.setActiveMenuIndex()
+      }
+    }
+  },
+  mounted() {
+    this.setActiveMenuIndex()
+  },
   methods: {
+    setActiveMenuIndex() {
+      // 遍历所有 group.items，找最匹配的 route
+      let found = null
+      for (const group of this.menuGroups) {
+        for (const item of group.items) {
+          if (this.$route.path.startsWith(item.route)) {
+            if (!found || item.route.length > found.route.length) {
+              found = item
+            }
+          }
+        }
+      }
+      if (found) {
+        this.currentActive = found.route
+        return
+      }
+      // 一级路由高亮第一个 menuItem
+      for (const group of this.menuGroups) {
+        if (group.items && group.items.length) {
+          const first = group.items[0]
+          const parentPath = first.route.split('/').slice(0, 2).join('/')
+          if (this.$route.path === parentPath) {
+            this.currentActive = first.route
+            return
+          }
+        }
+      }
+      this.currentActive = ''
+    },
     handleMenuClick(group, item) {
       let menuItems = []
       let menuTitle = group.title

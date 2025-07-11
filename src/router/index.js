@@ -38,6 +38,12 @@ const children = [
 menuGroups.forEach(group => {
   group.items.forEach(item => {
     if (item.menuItem) {
+      // 添加一级路由本身的 redirect
+      children.push({
+        path: item.route.replace(/^\//, ''),
+        redirect: item.menuItem[0].route.replace(/^\//, ''),
+      })
+      // 原有的 children 路由
       children.push({
         path: item.route.replace(/^\//, ''),
         name: item.route.replace(/^\//, ''),
