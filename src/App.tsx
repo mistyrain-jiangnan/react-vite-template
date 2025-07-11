@@ -1,6 +1,4 @@
 import { useTemplateStore } from "./store";
-import MarkdownRenderer from "./components/MarkdownRenderer";
-import readmeContent from "../README.md?raw";
 
 const App = () => {
   const code = useTemplateStore((state) => state.code);
@@ -21,8 +19,6 @@ const App = () => {
           点击
         </button>
       </div>
-
-      <MarkdownRenderer content={readmeContent} />
     </div>
   );
 };

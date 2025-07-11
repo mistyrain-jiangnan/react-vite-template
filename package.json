@@ -14,8 +14,6 @@
     "@unocss/reset": "^66.3.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-markdown": "^9.0.1",
-    "react-syntax-highlighter": "^15.6.1",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
